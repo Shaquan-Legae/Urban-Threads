@@ -1,0 +1,261 @@
+/* login.css - Styling for login page */
+:root {
+    color-scheme: light;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #1f1f1f;
+    background-color: #f5f6f8;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    background: #f5f6f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+}
+
+.login-container {
+    width: min(100%, 960px);
+    max-height: 60vh;
+}
+
+.login-card {
+    display: flex;
+    gap: 20px;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 24px 80px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+}
+
+.login-card__form,
+.login-card__image {
+    width: 50%;
+}
+
+.login-card__form {
+    padding: 52px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+.login-card__form h1 {
+    margin: 0;
+    font-size: clamp(2rem, 3.2vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: #111827;
+}
+
+.social-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 46px;
+    padding: 0 16px;
+    border-radius: 12px;
+    border: 1px solid #e6e8ec;
+    background: #f6f6f8;
+    color: #23272f;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.social-btn:hover {
+    background: #ececf2;
+}
+
+.social-btn a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: inherit;
+    text-decoration: none;
+}
+
+.social-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #8e95a6;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e6e8ec;
+}
+
+form {
+    display: grid;
+    gap: 16px;
+}
+
+.form-group {
+    display: grid;
+    gap: 10px;
+}
+
+label {
+    font-size: 0.92rem;
+    color: #4b5563;
+}
+
+input {
+    width: 100%;
+    min-height: 28px;
+    border-radius: 14px;
+    border: 1px solid #d6d8df;
+    background: #fafafa;
+    padding: 13px 16px;
+    font-size: 1rem;
+    color: #141b29;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #7c88a0;
+    box-shadow: 0 0 0 4px rgba(124, 136, 160, 0.08);
+    background: #ffffff;
+}
+
+.auth-links {
+    color: #6b7280;
+    font-size: 0.92rem;
+    text-decoration: none;
+}
+
+.auth-links:hover, .signup-btn:hover {
+    color: #111827;
+    text-decoration: underline;
+}
+
+.login-btn {
+    width: 100%;
+    min-height: 45px;
+    border: none;
+    border-radius: 14px;
+    background: #111827;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.login-btn:hover {
+    background: #1f2937;
+}
+
+.footer-text {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+.footer-text a {
+    color: #111827;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-card__image {
+    min-height: 520px;
+    background: #f3f4f7;
+    position: relative;
+}
+
+.login-card__image img {
+    width: 100%;
+    height: 90vh;
+    object-fit: cover;
+    display: block;
+}
+
+.email-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.email-wrapper input {
+    width: 100%; 
+}
+
+#email-domain {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    left: 255px;
+    transform: translateY(-50%);
+
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    color: #6b7280;
+    cursor: pointer;
+
+    outline: none;
+}
+
+
+@media (max-width: 940px) {
+    .login-card {
+        flex-direction: column;
+    }
+
+    .login-card__form,
+    .login-card__image {
+        width: 100%;
+    }
+
+    .login-card__image {
+        min-height: 320px;
+    }
+}
+
+@media (max-width: 620px) {
+    body {
+        padding: 20px 16px;
+    }
+
+    .login-card {
+        gap: 0;
+    }
+
+    .login-card__form {
+        padding: 32px 24px;
+    }
+
+    .social-buttons {
+        grid-template-columns: 1fr;
+    }
+}

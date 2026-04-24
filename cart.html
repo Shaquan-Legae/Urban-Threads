@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Threads - Cart</title>
+    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <main>
+        <div class="cart-page">
+            <div class="cart-container">
+                <div class="cart-left">
+                    <div class="cart-header">
+                        <h1 class="cart-title">Shopping Cart</h1>
+                        <span class="cart-count">0 items</span>
+                    </div>
+
+                    <div class="cart-items">
+                    </div>
+
+                    <a href="shop.html" class="back-link">← Back to shop</a>
+                </div>
+
+                <div class="cart-right">
+                    <div class="summary">
+                        <h2 class="summary__title">Summary</h2>
+
+                        <div class="summary__row">
+                            <span class="summary__label"></span>
+                            <span class="summary__value"></span>
+                        </div>
+
+                        <div class="summary__shipping">
+                            <label class="summary__label">SHIPPING</label>
+                            <select class="summary__select" name="shipping" title="shipping">
+                                <option>Standard Delivery (3-5 Days) - R 5.00</option>
+                                <option>Express Delivery (1-2 Days) - R 15.00</option>
+                            </select>
+                        </div>
+
+                        <div class="summary__promo">
+                            <label class="summary__label">GIVE CODE</label>
+                            <div class="promo-input">
+                                <input type="text" placeholder="Enter your code" class="promo-input__field">
+                                <span class="promo-input__icon">→</span>
+                            </div>
+                        </div>
+
+                        <div class="summary__total">
+                            <span class="summary__total-label">TOTAL PRICE</span>
+                            <span class="summary__total-value">R 0.00</span>
+                        </div>
+
+                        <a href="card.html" class="checkout-btn">CHECKOUT</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/cart.js"></script>
+    <script type="module" src="js/ui.js"></script>
+</body>
+
+</html>

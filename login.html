@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Threads - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+
+    <section class="login-container">
+
+        <div class="login-card">
+
+            <!-- LEFT: FORM -->
+            <div class="login-card__form">
+
+                <h1>Account<br>Login</h1>
+
+                <!-- Social Buttons -->
+                <div class="social-buttons">
+                    <button type="button" class="social-btn google-btn">
+                        <a href="#"><img src="assets/google.svg" alt="Google Logo" class="social-logo"> Google </a>
+                    </button>
+
+                    <button type="button" class="social-btn facebook-btn">
+                        <a href="#"><img src="assets/facebook.png" alt="Facebook Logo"> Facebook </a>
+                    </button>
+                </div>
+
+                <!-- Divider -->
+                <div class="divider">or</div>
+
+                <!-- FORM -->
+                <form class="login-form">
+
+                    <div class="form-group email-wrapper">
+                        <input type="text" id="email" placeholder="Enter your email" required>
+
+                        <select id="email-domain" title="Email Domain">
+                            <option value="@gmail.com">@gmail.com</option>
+                            <option value="@outlook.com">@outlook.com</option>
+                            <option value="@yahoo.com">@yahoo.com</option>
+                            <option value="@icloud.com">@icloud.com</option>
+                            <option value="@zaio.com">@zaio.com</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+
+                    <a href="#" class="auth-links forgot-password-btn">
+                        Forgot your password?
+                    </a>
+
+                    <button type="button" class="login-btn">Log In</button>
+
+                </form>
+
+                <p class="footer-text">
+                    Don’t have an account?
+                    <a href="signup.html" class="signup-btn">Sign Up</a>
+                </p>
+
+            </div>
+
+            <!-- RIGHT: IMAGE -->
+            <div class="login-card__image">
+                <img src="assets/rack.png" alt="Login Image">
+            </div>
+
+        </div>
+
+    </section>
+
+    <script type="module" src="js/auth.js"></script>
+
+</body>
+
+</html>
