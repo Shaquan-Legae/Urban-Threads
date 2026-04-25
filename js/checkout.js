@@ -27,13 +27,22 @@ function getSummaryContainer() {
 function detectCardType(number) {
   if (!number) return null;
 
-  const cleaned = number.replace(/\D/g, "");
+  const cleaned = String(number).replace(/\D/g, "");
 
-  if (/^4/.test(cleaned)) {
+  // Visa: starts with 4
+  if (cleaned.charAt(0) === "4") {
     return "visa";
   }
 
-  if (/^(51|52|53|54|55)/.test(cleaned) || /^(2221|2720)/.test(cleaned)) {
+  // Mastercard: 51-55 OR 2221-2720
+  const firstTwo = Number(cleaned.slice(0, 2));
+  const firstFour = Number(cleaned.slice(0, 4));
+
+  if (!Number.isNaN(firstTwo) && firstTwo >= 51 && firstTwo <= 55) {
+    return "mastercard";
+  }
+
+  if (!Number.isNaN(firstFour) && firstFour >= 2221 && firstFour <= 2720) {
     return "mastercard";
   }
 
@@ -106,17 +115,33 @@ function attachDeliveryOptionListeners() {
   }
 
   deliveryOptions.forEach((radio) => {
+    // avoid attaching duplicate listeners
+    if (radio.dataset._listenerAttached) return;
+
     radio.addEventListener("change", () => {
       const feeValue = Number(radio.dataset.fee) || 0;
       currentDeliveryFee = feeValue;
       console.log("Delivery option selected:", radio.value, "Fee:", feeValue);
-      
+
       if (deliveryError) {
-        deliveryError.style.display = "none";
+        deliveryError.classList.remove("visible");
+        deliveryError.style.display = "";
       }
       updateCheckoutTotal();
     });
+
+    radio.dataset._listenerAttached = "1";
   });
+
+  // Ensure a sensible default selection on load if none chosen
+  const alreadySelected = document.querySelector('input[name="delivery"]:checked');
+  if (!alreadySelected && deliveryOptions[0]) {
+    deliveryOptions[0].checked = true;
+    const feeValue = Number(deliveryOptions[0].dataset.fee) || 0;
+    currentDeliveryFee = feeValue;
+  }
+  // reflect initial total
+  updateCheckoutTotal();
 }
 
 function getSelectedDeliveryOption() {

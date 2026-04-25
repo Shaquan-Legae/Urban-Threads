@@ -75,4 +75,163 @@ nav {
     font-size: 14px;
     font-weight: 600;
 }
-    /* Responsive Design */
+        /* Responsive Design */
+
+/* ----- Tablet landscape and smaller (1024px) ----- */
+@media (max-width: 1024px) {
+    nav {
+        padding: 14px 18px;
+        height: auto;
+        align-items: center;
+    }
+
+    .logo {
+        padding-left: 24px;
+        font-size: 22px;
+    }
+
+    /* Allow nav-links to wrap and remain accessible without changing desktop layout */
+    .nav-links {
+        width: 100%;
+        margin-top: 8px;
+        padding: 0 18px;
+    }
+
+    .nav-links ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-start;
+    }
+
+    .nav-option {
+        gap: 10px;
+        right: 0;
+        margin-left: auto;
+    }
+
+    main { padding: 20px; }
+}
+
+/* ----- Tablet portrait and large phones (768px) ----- */
+@media (max-width: 768px) {
+    nav {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 12px 14px;
+        row-gap: 6px;
+    }
+
+    .logo {
+        order: 1;
+        padding-left: 12px;
+        font-size: 20px;
+    }
+
+    /* Visual hamburger (CSS-only) shown at right. Nav links become full width stacked below. */
+    .nav-option {
+        order: 2;
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav-option::before {
+        content: '';
+        display: inline-block;
+        width: 22px;
+        height: 16px;
+        background-image: linear-gradient(#111111 0 0);
+        background-repeat: no-repeat;
+        background-size: 22px 2px, 22px 2px, 22px 2px;
+        background-position: 0 2px, 0 7px, 0 12px;
+    }
+
+    .nav-links {
+        order: 3;
+        width: 100%;
+        padding: 0 12px 12px 12px;
+    }
+
+    .nav-links ul {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .nav-links ul li a {
+        padding: 10px 12px;
+        border-radius: 6px;
+        background: #ffffff;
+        box-shadow: 0 2px 8px rgba(17,17,17,0.04);
+    }
+
+    /* Hide non-essential elements in compact header */
+    .nav-option .price, .nav-option .logout-btn { display: none; }
+
+    /* Make images/icons touch friendly */
+    .nav-option img, .nav-option a img { width: 20px; height: 20px; }
+
+    /* Content spacing */
+    main { padding: 16px; }
+    .section { padding: 16px; }
+
+    /* Make product grids flow to 2 columns or 1 depending on available width */
+    .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .instagram-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Forms and inputs full width */
+    input, .form-input { width: 100%; box-sizing: border-box; }
+}
+
+/* ----- Small phones (576px) ----- */
+@media (max-width: 576px) {
+    nav { padding: 10px 12px; }
+
+    .logo { font-size: 18px; padding-left: 12px; }
+
+    .nav-links { padding: 0 10px 10px 10px; }
+    .nav-links ul { gap: 6px; }
+
+    /* Single-column product/listing layout for narrow screens */
+    .product-grid, .instagram-grid { grid-template-columns: 1fr; }
+
+    /* Hero adjustments */
+    .hero-title { font-size: 1.4rem; }
+    .hero-description { font-size: 0.95rem; }
+
+    /* Checkout / Cart / Forms: stack, full width, reduced paddings */
+    .checkout-container, .payment-container { padding: 12px; }
+    .checkout-content { gap: 16px; }
+    .checkout-section { padding: 16px; }
+    .payment-form .form-row { grid-template-columns: 1fr; gap: 12px; }
+
+    /* Cart item layout: make items stack nicely */
+    .cart-item { display: grid; grid-template-columns: 64px 1fr auto; gap: 8px; align-items: center; }
+    .cart-item__image { width: 64px; height: 64px; object-fit: cover; }
+
+    /* Buttons full width where appropriate */
+    .pay-now-btn, .pay-btn { width: 100%; }
+}
+
+/* ----- Extra small phones (420px and below) ----- */
+@media (max-width: 420px) {
+    nav { padding: 8px 10px; }
+    .logo { font-size: 17px; }
+
+    .nav-links ul li a { font-size: 16px; padding: 10px; }
+
+    .hero-title { font-size: 1.2rem; }
+    .hero-description { font-size: 0.9rem; }
+
+    .product-card { padding: 10px; }
+
+    /* Tighten spacing for checkout */
+    .order-total-section { padding: 14px; }
+    .order-total-row { font-size: 0.95rem; }
+
+    /* Inputs slightly smaller for tiny screens */
+    input, .form-input { padding: 10px 12px; font-size: 0.95rem; }
+}

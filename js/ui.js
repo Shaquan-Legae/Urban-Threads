@@ -290,14 +290,23 @@ export function createCartItem(product, quantity) {
 
 export function updateCartTotal(total) {
   try {
-    const totalElements = document.querySelectorAll(
-      ".cart-total, .price strong, .total-value, .summary__total-value, .summary__value",
-    );
-
     const subtotal = Number.isFinite(Number(total)) ? Number(total) : 0;
     const deliveryFee = Number.isFinite(Number(selectedDeliveryFee))
       ? Number(selectedDeliveryFee)
       : 0;
+
+    // Navbar price should show subtotal only (no delivery fee). If cart is empty show R0.00
+    const navbarPriceEl = document.querySelector(".price strong");
+    if (navbarPriceEl) {
+      const navDisplay = subtotal > 0 ? subtotal.toFixed(2) : "0.00";
+      navbarPriceEl.innerText = `R${navDisplay}`;
+    }
+
+    // Other UI totals (cart page / summary) should include delivery fee
+    const totalElements = document.querySelectorAll(
+      ".cart-total, .total-value, .summary__total-value, .summary__value",
+    );
+
     const finalTotal = subtotal + deliveryFee;
     const formattedTotal = finalTotal.toFixed(2);
 

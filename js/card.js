@@ -1,6 +1,6 @@
 // card.js - Payment page auth guard + cart-derived total display
 
-import { getCartItemCount, getCartState, getCartTotal, startCartState, subscribeCartState, waitForAuthState } from "./cart-state.js";
+import { getCartItemCount, getCartState, getCartTotal, startCartState, subscribeCartState, waitForAuthState, removeCartProduct } from "./cart-state.js";
 
 const pathName = window.location.pathname.toLowerCase();
 const isCardPage = pathName.endsWith("card.html");
@@ -70,8 +70,12 @@ function bindPaymentValidation() {
     return;
   }
 
-  payBtn.addEventListener("click", (event) => {
+  let isProcessing = false;
+
+  payBtn.addEventListener("click", async (event) => {
     event.preventDefault();
+
+    if (isProcessing) return;
 
     const state = getCartState();
     if (!getCartItemCount(state.items)) {
@@ -89,18 +93,51 @@ function bindPaymentValidation() {
       return;
     }
 
-    if (cardNumber.replace(/\s/g, "").length !== 16) {
+    // basic validation
+    if (cardNumber.replace(/\s/g, "").length < 13) {
       setCardMessage("Invalid card number", true);
       return;
     }
 
-    if (cvv.length !== 3 || Number.isNaN(Number(cvv))) {
+    if (cvv.length < 3 || Number.isNaN(Number(cvv))) {
       setCardMessage("Invalid CVV", true);
       return;
     }
 
-    alert("Payment successful! Your order has been placed.");
-    window.location.href = "index.html";
+    // Disable and show processing state
+    isProcessing = true;
+    payBtn.disabled = true;
+    payBtn.classList.add("loading");
+    const originalText = payBtn.textContent;
+    payBtn.textContent = "Processing...";
+
+    try {
+      // simulate payment delay
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // clear cart using existing removeCartProduct utility
+      const productIds = Object.keys(getCartState().items || {});
+      for (const pid of productIds) {
+        try {
+          await removeCartProduct(pid);
+        } catch (err) {
+          console.error("Failed to remove product during clear:", pid, err);
+          throw err;
+        }
+      }
+
+      // success — rely on subscribeCartState to update UI
+      alert("Payment successful! Your order has been placed.");
+      window.location.href = "index.html";
+    } catch (error) {
+      console.error("Checkout failed:", error);
+      setCardMessage("Payment failed. Please try again.", true);
+      // re-enable
+      payBtn.disabled = false;
+      payBtn.classList.remove("loading");
+      payBtn.textContent = originalText;
+      isProcessing = false;
+    }
   });
 
   payBtn.dataset.bound = "true";
