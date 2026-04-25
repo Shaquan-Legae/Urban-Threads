@@ -61,6 +61,19 @@
                 <button type="submit" class="pay-btn">Pay Now</button>
             </form>
 
+                <!-- Payment Success Message (hidden by default) -->
+                <div id="payment-success" class="payment-success" style="display: none;">
+                    <div class="payment-success__icon">
+                        <svg viewBox="0 0 100 100" width="64" height="64" aria-hidden="true">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#10b981" stroke-width="6" opacity="0.12"></circle>
+                            <path class="checkmark" fill="none" stroke="#10b981" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M28 52 L44 68 L74 36"></path>
+                        </svg>
+                    </div>
+                    <p class="payment-success__title">Payment Processed</p>
+                    <p class="payment-success__subtitle">Thank you — your order is confirmed.</p>
+                    <a href="index.html" class="success-link">Continue Shopping</a>
+                </div>
+
             <div class="security-badge">
                 <i class="fas fa-lock"></i>
                 <span>Your payment is secured with SSL encryption</span>

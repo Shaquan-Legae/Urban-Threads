@@ -7,6 +7,7 @@ const isCardPage = pathName.endsWith("card.html");
 const DELIVERY_FEE_STORAGE_KEY = "urban_threads_delivery_fee";
 
 let cardStateUnsubscribe = null;
+let _lastPersistedDelivery = 0;
 
 function redirectToLogin() {
   window.location.replace("login.html");
@@ -41,27 +42,45 @@ function getPersistedDeliveryFee() {
 }
 
 function renderCardState(state) {
-  if (state.loading) {
-    setCardMessage("Loading cart...", false);
-    return;
-  }
+  try {
+    if (state.loading) {
+      setCardMessage("Loading cart...", false);
+      return;
+    }
 
-  if (state.error) {
-    setCardMessage(state.error, true);
-    return;
-  }
+    if (state.error) {
+      setCardMessage(state.error, true);
+      return;
+    }
 
-  const itemCount = getCartItemCount(state.items);
-  if (!itemCount) {
-    setCardMessage("Your cart is empty", true);
-    updateTotalDisplay(0);
-    return;
-  }
+    const itemCount = getCartItemCount(state.items);
+    if (!itemCount) {
+      setCardMessage("Your cart is empty", true);
+      updateTotalDisplay(0);
+      return;
+    }
 
-  setCardMessage("Secure checkout", false);
-  const subtotal = getCartTotal(state.items);
-  const deliveryFee = getPersistedDeliveryFee();
-  updateTotalDisplay(subtotal + deliveryFee);
+    setCardMessage("Secure checkout", false);
+    const subtotal = getCartTotal(state.items);
+    const deliveryFee = getPersistedDeliveryFee();
+    _lastPersistedDelivery = deliveryFee;
+    updateTotalDisplay(subtotal + deliveryFee);
+  } catch (err) {
+    console.error('renderCardState error:', err);
+  }
+}
+
+function recomputeTotalFromState() {
+  try {
+    const state = getCartState();
+    if (!state || state.loading || state.error) return;
+    const subtotal = getCartTotal(state.items);
+    const deliveryFee = getPersistedDeliveryFee();
+    _lastPersistedDelivery = deliveryFee;
+    updateTotalDisplay(subtotal + deliveryFee);
+  } catch (err) {
+    console.error('recomputeTotalFromState error:', err);
+  }
 }
 
 function bindPaymentValidation() {
@@ -126,9 +145,12 @@ function bindPaymentValidation() {
         }
       }
 
-      // success — rely on subscribeCartState to update UI
-      alert("Payment successful! Your order has been placed.");
-      window.location.href = "index.html";
+      // success — show animated success UI then redirect
+      showPaymentSuccess();
+      // small delay to let animation play before redirecting
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1800);
     } catch (error) {
       console.error("Checkout failed:", error);
       setCardMessage("Payment failed. Please try again.", true);
@@ -141,6 +163,24 @@ function bindPaymentValidation() {
   });
 
   payBtn.dataset.bound = "true";
+}
+
+function showPaymentSuccess() {
+  try {
+    const container = document.querySelector('.payment-container');
+    const form = document.querySelector('.payment-form');
+    const success = document.getElementById('payment-success');
+    if (form) form.style.display = 'none';
+    if (success) success.style.display = 'block';
+    // ensure pay button disabled state removed after success to avoid odd focus
+    const payBtn = document.querySelector('.pay-btn');
+    if (payBtn) {
+      payBtn.disabled = true;
+      payBtn.classList.remove('loading');
+    }
+  } catch (err) {
+    console.error('showPaymentSuccess error:', err);
+  }
 }
 
 export async function initCardPage() {
@@ -169,6 +209,21 @@ export async function initCardPage() {
       return;
     }
     renderCardState(state);
+  });
+
+  // ensure initial total reflects current cart+delivery (in case subscribe delivered earlier)
+  recomputeTotalFromState();
+
+  // watch for delivery fee changes in other pages (storage events)
+  window.addEventListener('storage', (e) => {
+    if (e.key === DELIVERY_FEE_STORAGE_KEY) {
+      // only update if value actually changed
+      const newVal = Number(e.newValue);
+      if (!Number.isFinite(newVal)) return;
+      if (newVal === _lastPersistedDelivery) return;
+      _lastPersistedDelivery = newVal;
+      recomputeTotalFromState();
+    }
   });
 }
 

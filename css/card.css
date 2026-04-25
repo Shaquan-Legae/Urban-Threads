@@ -222,3 +222,47 @@ body {
         font-size: 20px;
     }
 }
+
+/* Payment success animation */
+.payment-success {
+    text-align: center;
+    padding: 40px 20px;
+    animation: fadeInScale 0.45s ease-out;
+}
+
+.payment-success__icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-success__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 6px;
+}
+
+.payment-success__subtitle {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 14px;
+}
+
+.checkmark {
+    stroke-dasharray: 120;
+    stroke-dashoffset: 120;
+    animation: drawCheck 0.6s ease-out 0.2s forwards;
+}
+
+@keyframes drawCheck {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+}
