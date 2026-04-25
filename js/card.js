@@ -33,8 +33,39 @@ function updateTotalDisplay(total) {
 
 function getPersistedDeliveryFee() {
   try {
-    const stored = Number(sessionStorage.getItem(DELIVERY_FEE_STORAGE_KEY));
-    return Number.isFinite(stored) ? stored : 0;
+    // sessionStorage is the primary source
+    const raw = sessionStorage.getItem(DELIVERY_FEE_STORAGE_KEY);
+    console.debug("card: read sessionStorage key", DELIVERY_FEE_STORAGE_KEY, "raw:", raw, "pathname:", location.pathname);
+    const parsed = Number(raw);
+    if (Number.isFinite(parsed)) return parsed;
+
+    // fallback: localStorage
+    try {
+      const rawLocal = localStorage.getItem(DELIVERY_FEE_STORAGE_KEY);
+      if (rawLocal != null) {
+        const parsedLocal = Number(rawLocal);
+        console.debug("card: read localStorage key", DELIVERY_FEE_STORAGE_KEY, "rawLocal:", rawLocal);
+        if (Number.isFinite(parsedLocal)) return parsedLocal;
+      }
+    } catch (e) {
+      // ignore localStorage read errors
+    }
+
+    // fallback: try DOM (if delivery options present on this page)
+    try {
+      const selected = document.querySelector('input[name="delivery"]:checked');
+      if (selected && selected.dataset && selected.dataset.fee) {
+        const fromDom = Number(selected.dataset.fee);
+        if (Number.isFinite(fromDom)) {
+          console.debug('card: read delivery fee from DOM', fromDom);
+          return fromDom;
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    return 0;
   } catch (error) {
     console.warn("Unable to read delivery fee on card page:", error);
     return 0;
@@ -64,7 +95,9 @@ function renderCardState(state) {
     const subtotal = getCartTotal(state.items);
     const deliveryFee = getPersistedDeliveryFee();
     _lastPersistedDelivery = deliveryFee;
-    updateTotalDisplay(subtotal + deliveryFee);
+    const finalTotal = subtotal + deliveryFee;
+    console.info('card: renderCardState', { pathname: location.pathname, subtotal, deliveryFee, finalTotal, sessionKeys: Object.keys(sessionStorage) });
+    updateTotalDisplay(finalTotal);
   } catch (err) {
     console.error('renderCardState error:', err);
   }
@@ -77,7 +110,9 @@ function recomputeTotalFromState() {
     const subtotal = getCartTotal(state.items);
     const deliveryFee = getPersistedDeliveryFee();
     _lastPersistedDelivery = deliveryFee;
-    updateTotalDisplay(subtotal + deliveryFee);
+    const finalTotal = subtotal + deliveryFee;
+    console.info('card: recomputeTotalFromState', { pathname: location.pathname, subtotal, deliveryFee, finalTotal, sessionKeys: Object.keys(sessionStorage) });
+    updateTotalDisplay(finalTotal);
   } catch (err) {
     console.error('recomputeTotalFromState error:', err);
   }
@@ -195,6 +230,14 @@ export async function initCardPage() {
   if (!initialState.user) {
     redirectToLogin();
     return;
+  }
+
+  // diagnostic: log sessionStorage keys and persisted delivery fee
+  try {
+    console.info('card:init sessionKeys', Object.keys(sessionStorage));
+    console.info('card:init persisted delivery fee', sessionStorage.getItem('urban_threads_delivery_fee'));
+  } catch (err) {
+    console.warn('card:init sessionStorage read failed', err);
   }
 
   bindPaymentValidation();

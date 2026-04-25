@@ -121,6 +121,12 @@ function attachDeliveryOptionListeners() {
     radio.addEventListener("change", () => {
       const feeValue = Number(radio.dataset.fee) || 0;
       currentDeliveryFee = feeValue;
+      try {
+        sessionStorage.setItem("urban_threads_delivery_fee", String(feeValue));
+        console.log("checkout: persisted delivery fee", feeValue, "pathname:", location.pathname);
+      } catch (err) {
+        console.warn("checkout: failed to persist delivery fee:", err);
+      }
       console.log("Delivery option selected:", radio.value, "Fee:", feeValue);
 
       if (deliveryError) {
@@ -139,6 +145,12 @@ function attachDeliveryOptionListeners() {
     deliveryOptions[0].checked = true;
     const feeValue = Number(deliveryOptions[0].dataset.fee) || 0;
     currentDeliveryFee = feeValue;
+    try {
+      sessionStorage.setItem("urban_threads_delivery_fee", String(feeValue));
+      console.log("checkout: default persisted delivery fee", feeValue, "pathname:", location.pathname);
+    } catch (err) {
+      console.warn("checkout: failed to persist default delivery fee:", err);
+    }
   }
   // reflect initial total
   updateCheckoutTotal();
@@ -352,6 +364,14 @@ export async function initCheckoutPage() {
   }
 
   console.log("Initializing checkout page");
+
+  // diagnostic: log existing sessionStorage keys and delivery fee
+  try {
+    console.info('checkout:init sessionKeys', Object.keys(sessionStorage));
+    console.info('checkout:init persisted delivery fee', sessionStorage.getItem('urban_threads_delivery_fee'));
+  } catch (err) {
+    console.warn('checkout:init sessionStorage read failed', err);
+  }
 
   await startCartState();
   await waitForAuthState();
